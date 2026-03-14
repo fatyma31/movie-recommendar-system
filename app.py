@@ -2,12 +2,23 @@ import streamlit as st
 import pickle
 import pandas as pd
 import requests
+import os
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # -----------------------
 # Step 1: Load Pickle Files
 # -----------------------
 movies = pickle.load(open("movie.pkl", "rb"))
-similarity = pickle.load(open("similarity.pkl", "rb"))
+
+if os.path.exists("similarity.pkl"):
+    similarity = pickle.load(open("similarity.pkl", "rb"))
+else:
+    cv = CountVectorizer(max_features=5000, stop_words='english')
+    vectors = cv.fit_transform(movies['tags']).toarray()
+    similarity = cosine_similarity(vectors)
+    pickle.dump(similarity, open("similarity.pkl", "wb"))
+
 movies_list = movies['title'].values
 
 st.title('🎬 Movie Recommender System')
@@ -15,6 +26,7 @@ selected_movie = st.selectbox(
     'Select a movie:',
     movies_list
 )
+
 
 # -----------------------
 # Step 2: Fetch Poster Function
