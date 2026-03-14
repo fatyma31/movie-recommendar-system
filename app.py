@@ -9,6 +9,8 @@ import requests
 movies = pickle.load(open(r"C:\Users\MS\ml project\movie recommendar system\movie_recommender_system\movie.pkl", 'rb'))
 similarity = pickle.load(open(r"C:\Users\MS\ml project\movie recommendar system\movie_recommender_system\similarity.pkl", 'rb'))
 
+movies = pickle.load(open("movie.pkl", "rb"))
+similarity = pickle.load(open("similarity.pkl", "rb"))
 movies_list = movies['title'].values
 
 st.title('🎬 Movie Recommender System')
